@@ -1,6 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
+  '@ashthornton/asscroll': ^2.0.11
   dat.gui: ^0.7.9
   gsap: ^3.12.2
   three: ^0.156.1
@@ -8,6 +9,7 @@ specifiers:
   vite-plugin-glsl: ^1.1.2
 
 dependencies:
+  '@ashthornton/asscroll': 2.0.11
   dat.gui: 0.7.9
   gsap: 3.12.2
   three: 0.156.1
@@ -17,6 +19,12 @@ devDependencies:
   vite: 4.4.9
 
 packages:
+
+  /@ashthornton/asscroll/2.0.11:
+    resolution: {integrity: sha512-X7Z+0aePdxn2WeKTx+sX/U9KNwjRSlY+ZeoGO7ZQy4uKRZ2cSHZi5ho9WiuDAPTPj97Smb2aZ7XC8goR73SmPA==}
+    dependencies:
+      '@unseenco/e': 2.3.0
+    dev: false
 
   /@esbuild/android-arm/0.18.20:
     resolution: {integrity: sha512-fyi7TDI/ijKKNZTUJAQqiG5T7YjJXgnzkURqmGj13C6dCqckZBLdl4h7bkhHt/t0WP+zO9/zwroDvANaOqO5Sw==}
@@ -212,6 +220,12 @@ packages:
     resolution: {integrity: sha512-LG4opVs2ANWZ1TJoKc937iMmNstM/d0ae1vNbnBvBhqCSezgVUOzcLCqbI5elV8Vy6WKwKjaqR+zO9VKirBBCA==}
     dev: false
 
+  /@unseenco/e/2.3.0:
+    resolution: {integrity: sha512-CAhlhyQ690oa67JnbXg8uFaRXGkZB6vtAclyBcwI8WwliNDCaRpY22k2sFX1ehcro0HMa6197K2rFYLkkdNqmA==}
+    dependencies:
+      selector-set: 1.1.5
+    dev: false
+
   /dat.gui/0.7.9:
     resolution: {integrity: sha512-sCNc1OHobc+Erc1HqiswYgHdVNpSJUlk/Hz8vzOCsER7rl+oF/4+v8GXFUyCgtXpoCX6+bnmg07DedLvBLwYKQ==}
     dev: false
@@ -287,6 +301,10 @@ packages:
     hasBin: true
     optionalDependencies:
       fsevents: 2.3.3
+
+  /selector-set/1.1.5:
+    resolution: {integrity: sha512-6SQw6yMew5iOZ8/cDHDEnJWRM4ot2mxP6szZyF5ptrBogw4AcS4EXRj/8BUfgAMwVfdL84qpModlBMOl2NVrsQ==}
+    dev: false
 
   /source-map-js/1.0.2:
     resolution: {integrity: sha512-R0XvVJ9WusLiqTCEiGCmICCMplcCkIwwR11mOSD9CR5u+IXYdiseeEuXCVAjS54zqwkLcPNnmU4OeJ6tUrWhDw==}

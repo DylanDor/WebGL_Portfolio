@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import ASScroll from "@ashthornton/asscroll";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import fragment from "./shaders/fragment.glsl";
 import vertex from "./shaders/vertex.glsl";
@@ -27,6 +28,12 @@ export default class Sktech {
     this.renderer.setPixelRatio(window.devicePixelRatio);
     this.container.appendChild(this.renderer.domElement);
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
+
+    this.asscroll = new ASScroll();
+
+    this.asscroll.enable({
+      horizontalScroll: true,
+    });
 
     this.time = 0;
     this.setupSettings();
@@ -77,20 +84,32 @@ export default class Sktech {
       .timeline()
       .to(this.material.uniforms.uCorners.value, {
         x: 1,
-        duration: 1
+        duration: 1,
       })
-      .to(this.material.uniforms.uCorners.value, {
-        y: 1,
-        duration: 1
-      },0.1)
-      .to(this.material.uniforms.uCorners.value, {
-        z: 1,
-        duration: 1
-      },0.2)
-      .to(this.material.uniforms.uCorners.value, {
-        w: 1,
-        duration: 1
-      },0.3);
+      .to(
+        this.material.uniforms.uCorners.value,
+        {
+          y: 1,
+          duration: 1,
+        },
+        0.1
+      )
+      .to(
+        this.material.uniforms.uCorners.value,
+        {
+          z: 1,
+          duration: 1,
+        },
+        0.2
+      )
+      .to(
+        this.material.uniforms.uCorners.value,
+        {
+          w: 1,
+          duration: 1,
+        },
+        0.3
+      );
 
     this.mesh = new THREE.Mesh(this.geometry, this.material);
     this.scene.add(this.mesh);
