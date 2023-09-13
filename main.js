@@ -2,7 +2,7 @@ import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import fragment from "./shaders/fragment.glsl";
 import vertex from "./shaders/vertex.glsl";
-import testTexture from "./water.jpg";
+import testTexture from "./texture.jpg";
 import * as dat from "dat.gui";
 
 export default class Sktech {
@@ -57,15 +57,15 @@ export default class Sktech {
 
   addObjects() {
     this.geometry = new THREE.PlaneGeometry(300, 300, 100, 100);
-    // this.geometry = new THREE.SphereGeometry(0.5,150,150);
     this.material = new THREE.ShaderMaterial({
       // wireframe: true,
       uniforms: {
         time: { value: 1.0 },
         uProgress: { value: 1.0 },
         uTexture: { value: new THREE.TextureLoader().load(testTexture) },
-        uResolution: { value: new THREE.Vector2(this.width,this.height) },
-        uQuadSize: { value: new THREE.Vector2(300,300) },
+        uTextureSize: { value: new THREE.Vector2(100, 100) },
+        uResolution: { value: new THREE.Vector2(this.width, this.height) },
+        uQuadSize: { value: new THREE.Vector2(300, 300) },
       },
       vertexShader: vertex,
       fragmentShader: fragment,
