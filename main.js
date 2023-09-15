@@ -117,28 +117,79 @@ export default class Sktech {
 
       m.uniforms.uTexture.value = texture;
 
-               img.addEventListener('mouseover',()=>{
-                console.log('aled')
-                console.log("uCorners avant animation : ", m.uniforms.uCorners.value);
-                this.tl = gsap.timeline()
-                .to(m.uniforms.uCorners.value,{
-                    x:0,
-                    duration: 0.4
-                })
-                .to(m.uniforms.uCorners.value,{
-                    y:0,
-                    duration: 0.4
-                },0.1)
-                .to(m.uniforms.uCorners.value,{
-                    z:0,
-                    duration: 0.4
-                },0.2)
-                .to(m.uniforms.uCorners.value,{
-                    w:0,
-                    duration: 0.4
-                },0.3)
-                console.log("uCorners après animation : ", m.uniforms.uCorners.value);
-              })
+      img.addEventListener("mouseover", () => {
+        this.tl = gsap
+          .timeline()
+          .to(m.uniforms.uProgress, {
+            value: 1,
+            duration: 0.5,
+          })
+          .to(m.uniforms.uCorners.value, {
+            x: 1,
+            duration: 1,
+          })
+          .to(
+            m.uniforms.uCorners.value,
+            {
+              y: 1,
+              duration: 0.4,
+            },
+            0.1
+          )
+          .to(
+            m.uniforms.uCorners.value,
+            {
+              z: 1,
+              duration: 0.4,
+            },
+            0.2
+          )
+          .to(
+            m.uniforms.uCorners.value,
+            {
+              w: 1,
+              duration: 0.4,
+            },
+            0.3
+          );
+      });
+
+      img.addEventListener("mouseout", () => {
+        this.tl = gsap
+          .timeline()
+          .to(m.uniforms.uProgress, {
+            value: 0,
+            duration: 0.6,
+          })
+          .to(m.uniforms.uCorners.value, {
+            x: 0,
+            duration: 1,
+          })
+          .to(
+            m.uniforms.uCorners.value,
+            {
+              y: 0,
+              duration: 0.4,
+            },
+            0.1
+          )
+          .to(
+            m.uniforms.uCorners.value,
+            {
+              z: 0,
+              duration: 0.4,
+            },
+            0.2
+          )
+          .to(
+            m.uniforms.uCorners.value,
+            {
+              w: 0,
+              duration: 0.4,
+            },
+            0.3
+          );
+      });
 
       let mesh = new THREE.Mesh(this.geometry, m);
       this.scene.add(mesh);
