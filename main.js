@@ -117,7 +117,9 @@ export default class Sktech {
 
       m.uniforms.uTexture.value = texture;
 
-               img.addEventListener('mouseout',()=>{
+               img.addEventListener('mouseover',()=>{
+                console.log('aled')
+                console.log("uCorners avant animation : ", m.uniforms.uCorners.value);
                 this.tl = gsap.timeline()
                 .to(m.uniforms.uCorners.value,{
                     x:0,
@@ -135,7 +137,8 @@ export default class Sktech {
                     w:0,
                     duration: 0.4
                 },0.3)
-            })
+                console.log("uCorners après animation : ", m.uniforms.uCorners.value);
+              })
 
       let mesh = new THREE.Mesh(this.geometry, m);
       this.scene.add(mesh);
