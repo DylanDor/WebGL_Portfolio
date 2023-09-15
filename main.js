@@ -6,6 +6,7 @@ import vertex from "./shaders/vertex.glsl";
 import testTexture from "./texture.jpg";
 import * as dat from "dat.gui";
 import gsap from "gsap";
+import barba from "@barba/core";
 
 export default class Sktech {
   constructor(options) {
@@ -35,15 +36,112 @@ export default class Sktech {
     });
 
     this.asscroll.enable({
-      horizontalScroll: true,
+      horizontalScroll: !document.body.classList.contains("b-inside"),
     });
 
     this.time = 0;
     // this.setupSettings();
     this.addObjects();
+    this.addClickEvents();
     this.resize();
     this.render();
+
+    this.barba();
+
     this.setupResize();
+  }
+
+  barba() {
+    this.animationRunning = false;
+    let that = this;
+    barba.init({
+      transitions: [
+        {
+          name: "from-home-transition",
+          from: {
+            namespace: ["home"],
+          },
+          leave(data) {
+            that.animationRunning = true;
+            that.asscroll.disable();
+            return gsap.timeline().to(data.current.container, {
+              opacity: 0,
+              duration: 0.5,
+            });
+          },
+          enter(data) {
+            that.asscroll = new ASScroll({
+              disableRaf: true,
+              containerElement: data.next.container.querySelector(
+                "[asscroll-container]"
+              ),
+            });
+            that.asscroll.enable({
+              newScrollElements:
+                data.next.container.querySelector(".scroll-wrap"),
+            });
+            return gsap.timeline().from(data.next.container, {
+              opacity: 0,
+              onComplete: () => {
+                that.container.style.visibility = "hidden";
+                that.animationRunning = false;
+              },
+            });
+          },
+        },
+        {
+          name: "from-inside-page-transition",
+          from: {
+            namespace: ["inside"],
+          },
+          leave(data) {
+            that.asscroll.disable();
+            return gsap
+              .timeline()
+              .to(".curtain", {
+                duration: 0.3,
+                y: 0,
+              })
+              .to(data.current.container, {
+                opacity: 0,
+              });
+          },
+          enter(data) {
+            that.asscroll = new ASScroll({
+              disableRaf: true,
+              containerElement: data.next.container.querySelector(
+                "[asscroll-container]"
+              ),
+            });
+            that.asscroll.enable({
+              horizontalScroll: true,
+              newScrollElements:
+                data.next.container.querySelector(".scroll-wrap"),
+            });
+            // cleeaning old arrays
+            that.imageStore.forEach((m) => {
+              that.scene.remove(m.mesh);
+            });
+            that.imageStore = [];
+            that.materials = [];
+            that.addObjects();
+            that.resize();
+            that.addClickEvents();
+            that.container.style.visibility = "visible";
+
+            return gsap
+              .timeline()
+              .to(".curtain", {
+                duration: 0.3,
+                y: "-100%",
+              })
+              .from(data.next.container, {
+                opacity: 0,
+              });
+          },
+        },
+      ],
+    });
   }
 
   setupSettings() {
@@ -52,6 +150,47 @@ export default class Sktech {
     };
     this.gui = new dat.GUI();
     this.gui.add(this.settings, "progress", 0, 1, 0.001);
+  }
+
+  addClickEvents() {
+    this.imageStore.forEach((i) => {
+      i.img.addEventListener("click", () => {
+        let tl = gsap
+          .timeline()
+          .to(i.mesh.material.uniforms.uProgress, {
+            value: 1,
+            duration: 0.5,
+          })
+          .to(i.mesh.material.uniforms.uCorners.value, {
+            x: 1,
+            duration: 1,
+          })
+          .to(
+            i.mesh.material.uniforms.uCorners.value,
+            {
+              y: 1,
+              duration: 0.4,
+            },
+            0.1
+          )
+          .to(
+            i.mesh.material.uniforms.uCorners.value,
+            {
+              z: 1,
+              duration: 0.4,
+            },
+            0.2
+          )
+          .to(
+            i.mesh.material.uniforms.uCorners.value,
+            {
+              w: 1,
+              duration: 0.4,
+            },
+            0.3
+          );
+      });
+    });
   }
 
   resize() {
@@ -105,7 +244,6 @@ export default class Sktech {
 
     this.mesh = new THREE.Mesh(this.geometry, this.material);
     this.mesh.scale.set(300, 300, 1);
-    // this.scene.add(this.mesh);
     this.mesh.position.x = 300;
 
     this.images = [...document.querySelectorAll(".js-image")];
@@ -116,80 +254,6 @@ export default class Sktech {
       let texture = new THREE.TextureLoader().load(img.src);
 
       m.uniforms.uTexture.value = texture;
-
-      img.addEventListener("mouseover", () => {
-        this.tl = gsap
-          .timeline()
-          .to(m.uniforms.uProgress, {
-            value: 1,
-            duration: 0.5,
-          })
-          .to(m.uniforms.uCorners.value, {
-            x: 1,
-            duration: 1,
-          })
-          .to(
-            m.uniforms.uCorners.value,
-            {
-              y: 1,
-              duration: 0.4,
-            },
-            0.1
-          )
-          .to(
-            m.uniforms.uCorners.value,
-            {
-              z: 1,
-              duration: 0.4,
-            },
-            0.2
-          )
-          .to(
-            m.uniforms.uCorners.value,
-            {
-              w: 1,
-              duration: 0.4,
-            },
-            0.3
-          );
-      });
-
-      img.addEventListener("mouseout", () => {
-        this.tl = gsap
-          .timeline()
-          .to(m.uniforms.uProgress, {
-            value: 0,
-            duration: 0.6,
-          })
-          .to(m.uniforms.uCorners.value, {
-            x: 0,
-            duration: 1,
-          })
-          .to(
-            m.uniforms.uCorners.value,
-            {
-              y: 0,
-              duration: 0.4,
-            },
-            0.1
-          )
-          .to(
-            m.uniforms.uCorners.value,
-            {
-              z: 0,
-              duration: 0.4,
-            },
-            0.2
-          )
-          .to(
-            m.uniforms.uCorners.value,
-            {
-              w: 0,
-              duration: 0.4,
-            },
-            0.3
-          );
-      });
 
       let mesh = new THREE.Mesh(this.geometry, m);
       this.scene.add(mesh);
@@ -216,8 +280,6 @@ export default class Sktech {
   render() {
     this.time += 0.05;
     this.material.uniforms.time.value = this.time;
-    // this.material.uniforms.uProgress.value = this.settings.progress;
-    // this.tl.progress(this.settings.progress);
     this.asscroll.update();
     this.setPosition();
     this.mesh.rotation.x = this.time / 2000;
